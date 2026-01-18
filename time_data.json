@@ -1,20 +1,18 @@
 {
   "tasks": [
-    "tets",
-    "test 2"
+    {
+      "id": "95e20b34-c61b-4dd0-8044-13a996d72c10",
+      "name": "test"
+    }
   ],
   "sessions": [
     {
-      "task": "tets",
-      "start": "2026-01-16T12:12:25.925273",
-      "end": "2026-01-16T12:12:30.568092",
-      "duration_seconds": 5
-    },
-    {
-      "task": "test 2",
-      "start": "2026-01-16T12:12:39.885160",
-      "end": "2026-01-16T12:12:50.424266",
-      "duration_seconds": 11
+      "task_id": "95e20b34-c61b-4dd0-8044-13a996d72c10",
+      "task": "test",
+      "start": "2026-01-18T10:48:39.117189",
+      "end": "2026-01-18T10:48:40.425559",
+      "duration_seconds": 2,
+      "id": "9df21ca2-5562-4331-acd7-f0d9b79a87a5"
     }
   ]
 }
