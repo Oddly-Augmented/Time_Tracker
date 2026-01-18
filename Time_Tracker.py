@@ -107,8 +107,6 @@ class Timer:
         self.timer_label.config(text="00:00:00")
         self.start_time = None
 
-
-
     def update_timer(self):
         if self.timer_running:
             self.seconds += 1
@@ -119,40 +117,34 @@ class Timer:
             self.timer_label.config(text=time_str)
             self.root.after(1000, self.update_timer) #Update every 1 second
 
-
 class TaskSelector(tk.Frame):
     def __init__(self, parent, tasks, on_change):
         super().__init__(parent)
         self.tasks = tasks
         self.on_change = on_change
 
-        self.data = load_data()
-
         tk.Label(self, text="Task:").pack(anchor="w", padx=10, pady=(10, 0))
-        self.task_entry = tk.Entry(self, width=30)
-        self.task_entry.pack(padx=10, pady=5)
-
-        tk.Label(self, text="Saved Tasks:").pack(anchor="w", padx=10)
-        self.task_listbox = tk.Listbox(self, height=5)
-        self.task_listbox.pack(fill="x", padx=10)
-        self.task_listbox.bind("<<ListboxSelect>>", self.on_task_select)
+        self.task_combobox = ttk.Combobox(self, width=30)
+        self.task_combobox.pack(padx=10, pady=5)
+        # when user selects from dropdown
+        self.task_combobox.bind("<<ComboboxSelected>>", self.on_task_select)
 
         self.refresh_task_list()
 
     def get_task_name(self):
-        return self.task_entry.get().strip()
+        return self.task_combobox.get().strip()
 
     def refresh_task_list(self):
-        self.task_listbox.delete(0, tk.END)
-        for task in self.tasks:
-            self.task_listbox.insert(tk.END, task["name"])
+        # build a list of names from self.tasks
+        names = [task["name"] for task in self.tasks]
+        self.task_combobox["values"] = names   # this populates the dropdown
 
-    def on_task_select(self, event):
-        selection = self.task_listbox.curselection()
-        if selection:
-            task = self.tasks[selection[0]]
-            self.task_entry.delete(0, tk.END)
-            self.task_entry.insert(0, task["name"])
+
+    def get_task_name(self):
+        return self.task_combobox.get().strip()
+
+    def on_task_select(self, event = None):
+        name = self.get_task_name()
 
     def get_current_task(self):
         name = self.get_task_name()
