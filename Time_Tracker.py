@@ -6,6 +6,8 @@ from datetime import datetime
 import uuid
 import os
 
+
+
 DATA_FILE = "time_data.json"
 
 def load_data():
@@ -126,25 +128,43 @@ class TaskSelector(tk.Frame):
         tk.Label(self, text="Task:").pack(anchor="w", padx=10, pady=(10, 0))
         self.task_combobox = ttk.Combobox(self, width=30)
         self.task_combobox.pack(padx=10, pady=5)
-        # when user selects from dropdown
+
+        #Dropdown
         self.task_combobox.bind("<<ComboboxSelected>>", self.on_task_select)
+
+        self.task_combobox.bind("<KeyRelease>", self.on_key_release)
 
         self.refresh_task_list()
 
-    def get_task_name(self):
-        return self.task_combobox.get().strip()
-
     def refresh_task_list(self):
         # build a list of names from self.tasks
-        names = [task["name"] for task in self.tasks]
-        self.task_combobox["values"] = names   # this populates the dropdown
+        self.names = [task["name"] for task in self.tasks]
+        self.task_combobox["values"] = self.names   # this populates the dropdown
 
+    def on_key_release(self, event):
+        typed = self.task_combobox.get()
+        
+        if event.keysym in ("BackSpace", "Left", "Right", "Delete", "Home", "End", "Control_L", "Control_R"):
+            return
+        
+        if not typed:
+            return
+        
+        
+
+        for name in self.names:
+            if name.lower().startswith(typed.lower()):
+
+                self.task_combobox.set(name)
+                self.task_combobox.icursor(len(typed))
+                self.task_combobox.select_range(len(typed), tk.END)
+                break
 
     def get_task_name(self):
         return self.task_combobox.get().strip()
 
     def on_task_select(self, event = None):
-        name = self.get_task_name()
+        self.name = self.get_task_name()
 
     def get_current_task(self):
         name = self.get_task_name()
